@@ -9,5 +9,6 @@
 	<body>
 		<h1>App working fine</h1>
 		<a href="./Club">Jarb had servlet</a>
+		<a href="./home">Home</a>
 	</body>
 </html>
