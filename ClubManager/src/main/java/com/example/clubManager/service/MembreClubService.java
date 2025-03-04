@@ -3,24 +3,25 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.example.clubManager.dao.ClubDao;
-import com.example.clubManager.model.Club;
+import com.example.clubManager.dao.MembreClubDao;
+import com.example.clubManager.model.MembreClub;
+import com.example.clubManager.model.MembreClubId;
 
 import java.util.List;
 
-public class ClubService {
+public class MembreClubService {
     private final SessionFactory sessionFactory;
 
-    public ClubService(SessionFactory sessionFactory) {
+    public MembreClubService(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    public void saveClub(Club club) {
+    public void saveMembreClub(MembreClub membreClub) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                ClubDao dao = new ClubDao();
-                dao.saveClub(session, club);
+                MembreClubDao dao = new MembreClubDao();
+                dao.saveMembreClub(session, membreClub);
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
@@ -29,26 +30,26 @@ public class ClubService {
         }
     }
 
-    public Club getClubById(int id) {
+    public MembreClub getMembreClubById(MembreClubId id) {
         try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getClubById(session, id);
+            MembreClubDao dao = new MembreClubDao();
+            return dao.getMembreClubById(session, id);
         }
     }
 
-    public List<Club> getAllClubs() {
+    public List<MembreClub> getAllMembreClubs() {
         try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getAllClubs(session);
+            MembreClubDao dao = new MembreClubDao();
+            return dao.getAllMembreClubs(session);
         }
     }
 
-    public void updateClub(Club club) {
+    public void updateMembreClub(MembreClub membreClub) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                ClubDao dao = new ClubDao();
-                dao.updateClub(session, club);
+                MembreClubDao dao = new MembreClubDao();
+                dao.updateMembreClub(session, membreClub);
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
@@ -57,12 +58,12 @@ public class ClubService {
         }
     }
 
-    public void deleteClub(int id) {
+    public void deleteMembreClub(MembreClubId id) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                ClubDao dao = new ClubDao();
-                dao.deleteClub(session, id);
+                MembreClubDao dao = new MembreClubDao();
+                dao.deleteMembreClub(session, id);
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
@@ -71,17 +72,17 @@ public class ClubService {
         }
     }
 
-    public List<Club> getClubsByPresident(int presidentId) {
+    public List<MembreClub> getMembreClubsByClub(int clubId) {
         try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getClubsByPresident(session, presidentId);
+            MembreClubDao dao = new MembreClubDao();
+            return dao.getMembreClubsByClub(session, clubId);
         }
     }
 
-    public List<Club> getClubsByAdmin(int adminId) {
+    public List<MembreClub> getMembreClubsByMembre(int membreId) {
         try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getClubsByAdmin(session, adminId);
+            MembreClubDao dao = new MembreClubDao();
+            return dao.getMembreClubsByMembre(session, membreId);
         }
     }
 }

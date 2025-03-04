@@ -1,49 +1,44 @@
 package com.example.clubManager.dao;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
+import org.hibernate.Session;
 import com.example.clubManager.model.Club;
-
-
 import java.util.List;
-
 public class ClubDao {
 
-    private EntityManager entityManager;
-
-    public ClubDao(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public void saveClub(Session session, Club club) {
+        session.persist(club);
     }
 
-    // Ajouter un club
-    public void addClub(Club club) {
-        entityManager.persist(club);
-    }
-  
-
-    // Récupérer un club par son ID
-    public Club getClubById(int id) {
-        return entityManager.find(Club.class, id);
+    public Club getClubById(Session session, int id) {
+        return session.get(Club.class, id);
     }
 
-    // Récupérer tous les clubs
-    public List<Club> getAllClubs() {
-        TypedQuery<Club> query = entityManager.createQuery("SELECT c FROM Club c", Club.class);
-        return query.getResultList();
+    public List<Club> getAllClubs(Session session) {
+        return session.createQuery("from Club", Club.class).list();
     }
 
-    // Mettre à jour un club
-    public void updateClub(Club club) {
-        entityManager.merge(club);
+    public void updateClub(Session session, Club club) {
+        session.merge(club);
     }
 
-    // Supprimer un club
-    public void deleteClub(int id) {
-        Club club = getClubById(id);
+    public void deleteClub(Session session, int id) {
+        Club club = getClubById(session, id);
         if (club != null) {
-            entityManager.remove(club);
+            session.remove(club);
         }
     }
-}
 
+    /** Returns clubs where the specified student is the president. */
+    public List<Club> getClubsByPresident(Session session, int presidentId) {
+        return session.createQuery("from Club where president.idEtudiant = :presidentId", Club.class)
+                      .setParameter("presidentId", presidentId)
+                      .list();
+    }
+
+    /** Returns clubs administered by the specified user. */
+    public List<Club> getClubsByAdmin(Session session, int adminId) {
+        return session.createQuery("from Club where utilisateur.idUtilisateur = :adminId", Club.class)
+                      .setParameter("adminId", adminId)
+                      .list();
+    }
+}

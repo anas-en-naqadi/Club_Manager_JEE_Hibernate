@@ -3,24 +3,24 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.example.clubManager.dao.ClubDao;
-import com.example.clubManager.model.Club;
+import com.example.clubManager.dao.UtilisateurDao;
+import com.example.clubManager.model.Utilisateur;
 
 import java.util.List;
 
-public class ClubService {
+public class UtilisateurService {
     private final SessionFactory sessionFactory;
 
-    public ClubService(SessionFactory sessionFactory) {
+    public UtilisateurService(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    public void saveClub(Club club) {
+    public void saveUtilisateur(Utilisateur utilisateur) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                ClubDao dao = new ClubDao();
-                dao.saveClub(session, club);
+                UtilisateurDao dao = new UtilisateurDao();
+                dao.saveUtilisateur(session, utilisateur);
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
@@ -29,26 +29,26 @@ public class ClubService {
         }
     }
 
-    public Club getClubById(int id) {
+    public Utilisateur getUtilisateurById(int id) {
         try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getClubById(session, id);
+            UtilisateurDao dao = new UtilisateurDao();
+            return dao.getUtilisateurById(session, id);
         }
     }
 
-    public List<Club> getAllClubs() {
+    public List<Utilisateur> getAllUtilisateurs() {
         try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getAllClubs(session);
+            UtilisateurDao dao = new UtilisateurDao();
+            return dao.getAllUtilisateurs(session);
         }
     }
 
-    public void updateClub(Club club) {
+    public void updateUtilisateur(Utilisateur utilisateur) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                ClubDao dao = new ClubDao();
-                dao.updateClub(session, club);
+                UtilisateurDao dao = new UtilisateurDao();
+                dao.updateUtilisateur(session, utilisateur);
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
@@ -57,31 +57,17 @@ public class ClubService {
         }
     }
 
-    public void deleteClub(int id) {
+    public void deleteUtilisateur(int id) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                ClubDao dao = new ClubDao();
-                dao.deleteClub(session, id);
+                UtilisateurDao dao = new UtilisateurDao();
+                dao.deleteUtilisateur(session, id);
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
                 throw e;
             }
-        }
-    }
-
-    public List<Club> getClubsByPresident(int presidentId) {
-        try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getClubsByPresident(session, presidentId);
-        }
-    }
-
-    public List<Club> getClubsByAdmin(int adminId) {
-        try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getClubsByAdmin(session, adminId);
         }
     }
 }

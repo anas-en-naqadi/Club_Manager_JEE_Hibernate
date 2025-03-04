@@ -3,24 +3,24 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.example.clubManager.dao.ClubDao;
-import com.example.clubManager.model.Club;
+import com.example.clubManager.dao.EvenementDao;
+import com.example.clubManager.model.Evenement;
 
 import java.util.List;
 
-public class ClubService {
+public class EvenementService {
     private final SessionFactory sessionFactory;
 
-    public ClubService(SessionFactory sessionFactory) {
+    public EvenementService(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    public void saveClub(Club club) {
+    public void saveEvenement(Evenement even) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                ClubDao dao = new ClubDao();
-                dao.saveClub(session, club);
+                EvenementDao dao = new EvenementDao();
+                dao.saveEvenement(session, even);
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
@@ -29,26 +29,26 @@ public class ClubService {
         }
     }
 
-    public Club getClubById(int id) {
+    public Evenement getEvenementById(int id) {
         try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getClubById(session, id);
+            EvenementDao dao = new EvenementDao();
+            return dao.getEvenementById(session, id);
         }
     }
 
-    public List<Club> getAllClubs() {
+    public List<Evenement> getAllEvenements() {
         try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getAllClubs(session);
+            EvenementDao dao = new EvenementDao();
+            return dao.getAllEvenements(session);
         }
     }
 
-    public void updateClub(Club club) {
+    public void updateEvenement(Evenement even) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                ClubDao dao = new ClubDao();
-                dao.updateClub(session, club);
+                EvenementDao dao = new EvenementDao();
+                dao.updateEvenement(session, even);
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
@@ -57,12 +57,12 @@ public class ClubService {
         }
     }
 
-    public void deleteClub(int id) {
+    public void deleteEvenement(int id) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             try {
-                ClubDao dao = new ClubDao();
-                dao.deleteClub(session, id);
+                EvenementDao dao = new EvenementDao();
+                dao.deleteEvenement(session, id);
                 tx.commit();
             } catch (Exception e) {
                 tx.rollback();
@@ -71,17 +71,10 @@ public class ClubService {
         }
     }
 
-    public List<Club> getClubsByPresident(int presidentId) {
+    public List<Evenement> getEvenementsByClub(int clubId) {
         try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getClubsByPresident(session, presidentId);
-        }
-    }
-
-    public List<Club> getClubsByAdmin(int adminId) {
-        try (Session session = sessionFactory.openSession()) {
-            ClubDao dao = new ClubDao();
-            return dao.getClubsByAdmin(session, adminId);
+            EvenementDao dao = new EvenementDao();
+            return dao.getEvenementsByClub(session, clubId);
         }
     }
 }
