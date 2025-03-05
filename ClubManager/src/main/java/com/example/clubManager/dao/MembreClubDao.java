@@ -2,8 +2,8 @@ package com.example.clubManager.dao;
 
 import org.hibernate.Session;
 
-import com.example.clubManager.model.MembreClub;
-import com.example.clubManager.model.MembreClubId;
+import com.example.clubManager.models.MembreClub;
+import com.example.clubManager.models.MembreClubId;
 
 import java.util.List;
 public class MembreClubDao {

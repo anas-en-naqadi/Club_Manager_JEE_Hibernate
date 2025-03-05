@@ -1,4 +1,4 @@
-package com.example.clubManager.model;
+package com.example.clubManager.models;
 
 import javax.persistence.*;
 import java.util.Date;

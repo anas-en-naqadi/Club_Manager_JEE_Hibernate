@@ -1,7 +1,7 @@
 package com.example.clubManager.dao;
 
 import org.hibernate.Session;
-import com.example.clubManager.model.Club;
+import com.example.clubManager.models.Club;
 import java.util.List;
 public class ClubDao {
 

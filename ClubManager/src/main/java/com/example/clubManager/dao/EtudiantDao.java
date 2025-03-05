@@ -3,7 +3,7 @@ package com.example.clubManager.dao;
 import org.hibernate.Session;
 
 
-import com.example.clubManager.model.Etudiant;
+import com.example.clubManager.models.Etudiant;
 
 
 import java.util.List;

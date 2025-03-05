@@ -3,8 +3,8 @@ package com.example.clubManager.dao;
 import org.hibernate.Session;
 
 
-import com.example.clubManager.model.ParticipantEvenement;
-import com.example.clubManager.model.ParticipantEvenementId;
+import com.example.clubManager.models.ParticipantEvenement;
+import com.example.clubManager.models.ParticipantEvenementId;
 
 import java.util.List;
 public class ParticipantEvenementDao {

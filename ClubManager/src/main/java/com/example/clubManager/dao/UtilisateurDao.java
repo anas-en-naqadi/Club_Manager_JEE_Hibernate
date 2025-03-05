@@ -2,7 +2,7 @@ package com.example.clubManager.dao;
 
 import org.hibernate.Session;
 
-import com.example.clubManager.model.Utilisateur;
+import com.example.clubManager.models.Utilisateur;
 
 import java.util.List;
 public class UtilisateurDao {

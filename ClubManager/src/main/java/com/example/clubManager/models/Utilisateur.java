@@ -1,4 +1,4 @@
-package com.example.clubManager.model;
+package com.example.clubManager.models;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -30,6 +30,12 @@ public class Utilisateur {
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     private Set<Club> clubs = new HashSet<>();
     
+    
+    public Utilisateur(String e,String mp,String r) {
+    	email = e;
+    	motDePasse = mp;
+    	role = r;
+    }
     // Getters and Setters
     public Integer getId() {
         return id;

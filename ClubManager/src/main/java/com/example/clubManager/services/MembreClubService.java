@@ -1,11 +1,12 @@
-package com.example.clubManager.service;
+package com.example.clubManager.services;
 import org.hibernate.Session;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import com.example.clubManager.dao.MembreClubDao;
-import com.example.clubManager.model.MembreClub;
-import com.example.clubManager.model.MembreClubId;
+import com.example.clubManager.models.MembreClub;
+import com.example.clubManager.models.MembreClubId;
 
 import java.util.List;
 
