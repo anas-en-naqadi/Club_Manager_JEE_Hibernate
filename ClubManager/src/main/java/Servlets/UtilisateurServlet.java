@@ -22,11 +22,9 @@ public class UtilisateurServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
-            System.out.println("Initialisation de UtilisateurServlet...");
+
             utilisateurService = new UtilisateurService(HibernateUtil.getSessionFactory());
-            System.out.println("UtilisateurService initialisé avec succès.");
         } catch (Exception e) {
-            System.err.println("Erreur init : " + e.getMessage());
             throw new ServletException("Erreur lors de l'initialisation", e);
         }
     }
@@ -38,7 +36,6 @@ public class UtilisateurServlet extends HttpServlet {
             req.setAttribute("utilisateurs", utilisateurs);
             req.getRequestDispatcher("/pages/utilisateurs.jsp").forward(req, resp);
         } catch (Exception e) {
-            System.err.println("Erreur doGet : " + e.getMessage());
             req.setAttribute("error", "Erreur : " + e.getMessage());
             req.getRequestDispatcher("/pages/error.jsp").forward(req, resp);
         }
@@ -67,7 +64,6 @@ public class UtilisateurServlet extends HttpServlet {
 
     @Override
     public void destroy() {
-        System.out.println("Arrêt de UtilisateurServlet...");
         HibernateUtil.shutdown();
     }
 }

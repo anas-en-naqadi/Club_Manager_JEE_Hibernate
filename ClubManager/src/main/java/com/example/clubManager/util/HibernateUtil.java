@@ -6,6 +6,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+
 public class HibernateUtil {
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
@@ -26,7 +27,7 @@ public class HibernateUtil {
                 .getSessionFactoryBuilder()
                 .build();
         } catch (Exception e) {
-            System.err.println("SessionFactory creation failed: " + e);
+
             StandardServiceRegistryBuilder.destroy(registry);
             throw new ExceptionInInitializerError(e);
         }

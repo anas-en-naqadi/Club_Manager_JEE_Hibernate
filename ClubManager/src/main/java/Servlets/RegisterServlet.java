@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.io.IOException;
 
+@SuppressWarnings("serial")
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 

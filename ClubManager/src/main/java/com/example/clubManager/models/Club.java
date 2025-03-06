@@ -9,8 +9,9 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "club")
-public class Club {
 
+
+public class Club {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_CLUB")
@@ -45,6 +46,16 @@ public class Club {
     )
     private Set<Etudiant> membres = new HashSet<>();
 
+    
+    
+    @Column(name = "IMAGE", columnDefinition = "LONGBLOB")
+    private byte[] image;
+
+    
+    
+    
+    
+    
     // Constructors
     public Club() {}
 
@@ -77,4 +88,16 @@ public class Club {
     public void setEvenements(Set<Evenement> evenements) { this.evenements = evenements; }
     public Set<Etudiant> getMembres() { return membres; }
     public void setMembres(Set<Etudiant> membres) { this.membres = membres; }
+    
+    
+    public byte[] getImage() { return image; }
+    public void setImage(byte[] image) { this.image = image; }
+    
+    
+    
+    
+    
+    
+    
+    
 }

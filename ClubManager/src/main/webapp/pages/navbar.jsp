@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
@@ -19,9 +21,12 @@
                     <a class="nav-link ${currentPage eq 'login' ? 'active' : ''}" 
                        href="${pageContext.request.contextPath}/login">Login</a>
                 </li>
-                <li class="nav-item">
-					<a class="nav-link" href="${pageContext.request.contextPath}/logout">Déconnexion</a>
-                </li>
+                
+				<c:if test="${not empty sessionScope.user}">
+				    <li class="nav-item">
+				        <a class="nav-link" href="${pageContext.request.contextPath}/logout">Déconnexion</a>
+				    </li>
+				</c:if>
             </ul>
         </div>
     </div>

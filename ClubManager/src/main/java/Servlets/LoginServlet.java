@@ -23,6 +23,7 @@ public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+    	
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -35,7 +36,12 @@ public class LoginServlet extends HttpServlet {
             if (user != null && user.getMotDePasse().equals(password)) {
                 HttpSession httpSession = request.getSession();
                 httpSession.setAttribute("user", user);
-                response.sendRedirect(request.getContextPath() + "/my_clubs");
+                if(user.getRole().equals("admin")) {
+                    response.sendRedirect(request.getContextPath() + "/admin/clubs");
+                }else {
+                    response.sendRedirect(request.getContextPath() + "/my_clubs");    	
+                }
+
             } else {
                 response.sendRedirect(request.getContextPath() + "/login?error=Identifiants+invalides");
             }
