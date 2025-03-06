@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC 
-          "-//Hibernate/Hibernate Configuration DTD 3.0//EN" 
-          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-  <session-factory>
-    <!-- Database connection settings -->
-    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-    <property name="hibernate.connection.url">
-      jdbc:mysql://localhost:3306/club_management?useSSL=false
-    </property>
-    <property name="hibernate.connection.username">root</property>
-    <property name="hibernate.connection.password"></property>
-    
-    <!-- Connection pool settings (using built-in pool for testing) -->
-    <property name="hibernate.connection.pool_size">10</property>
+    <session-factory>
+        <!-- Database connection -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/club_management</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password"></property>
 
-    <!-- Hibernate properties -->
-    <!-- Do not specify dialect; Hibernate will auto-detect it -->
-    <property name="hibernate.hbm2ddl.auto">update</property>
-    <property name="hibernate.show_sql">true</property>
-    <property name="hibernate.format_sql">true</property>
+        <!-- SQL dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 
-    <!-- Mappings for your entities -->
-    <mapping class="com.example.clubManager.model.Club"/>
-    <mapping class="com.example.clubManager.model.Member"/>
-    <mapping class="com.example.clubManager.model.Event"/>
-  </session-factory>
+        <!-- Hibernate settings -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+    </session-factory>
 </hibernate-configuration>

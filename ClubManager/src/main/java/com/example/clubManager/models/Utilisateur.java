@@ -1,6 +1,6 @@
 package com.example.clubManager.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,15 +22,16 @@ public class Utilisateur {
     @Column(name = "ROLE", nullable = false, length = 50)
     private String role;
     
-    // One-to-One relationship with Etudiant
-    @OneToOne(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private Etudiant etudiant;
     
     // One-to-Many relationship with Club
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     private Set<Club> clubs = new HashSet<>();
     
-    
+    public Utilisateur() {
+
+    }
     public Utilisateur(String e,String mp,String r) {
     	email = e;
     	motDePasse = mp;

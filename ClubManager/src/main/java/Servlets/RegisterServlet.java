@@ -1,82 +1,67 @@
 package Servlets;
 
+import com.example.clubManager.models.Etudiant;
+import com.example.clubManager.models.Utilisateur;
+import com.example.clubManager.util.HibernateUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import java.io.IOException;
-import java.util.*;
 
-/**
- * Servlet implementation class RegisterServlet
- */
-@SuppressWarnings("serial")
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-    	
         request.setAttribute("currentPage", "register");
-    	
-        if (request.getSession(false) != null && request.getSession().getAttribute("user") != null) {
-            response.sendRedirect(request.getContextPath() + "/home");
-            return;
-        }
         request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
+        
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
+        String cne = request.getParameter("cne");
+        String nomComplet = request.getParameter("nomComplet");
+        String filliere = request.getParameter("filliere");
+        String faculte = request.getParameter("faculte");
 
-        Map<String, String> errors = new HashMap<>();
-
-        // Validation
         if (!password.equals(confirmPassword)) {
-            errors.put("passwordMismatch", "Les mots de passe ne correspondent pas");
-        }
-        if (!email.endsWith("@ucd.ac.ma")) {
-            errors.put("invalidEmail", "Email universitaire invalide");
-        }
-        //if (UserService.emailExists(email)) {
-            //errors.put("emailExists", "Un compte existe déjà avec cet email");
-        //}
-        //if (!validatePassword(password)) {
-            //errors.put("weakPassword", "Le mot de passe ne respecte pas les exigences de sécurité");
-        //}
-
-        if (!errors.isEmpty()) {
-            request.setAttribute("errors", errors);
-            request.setAttribute("formData", Map.of(
-                "firstName", firstName,
-                "lastName", lastName,
-                "email", email
-            ));
-            request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/register?error=Password+mismatch");
             return;
         }
 
-        try {
-            //User newUser = UserService.createUser(firstName, lastName, email, password);
-            request.getSession().setAttribute("successMessage", "Inscription réussie ! Veuillez vous connecter");
-            response.sendRedirect(request.getContextPath() + "/login");
-        } catch (Exception e) {
-            errors.put("registrationError", "Erreur lors de l'inscription");
-            request.setAttribute("errors", errors);
-            request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
-        }
-    }
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
 
-    @SuppressWarnings("unused")
-	private boolean validatePassword(String password) {
-        return password.length() >= 8 
-            && password.matches(".*[A-Z].*") 
-            && password.matches(".*\\d.*");
+            Utilisateur user = new Utilisateur();
+            user.setEmail(email);
+            user.setMotDePasse(password);
+            user.setRole("student");
+
+            Etudiant etudiant = new Etudiant();
+            etudiant.setCne(cne);
+            etudiant.setNomComplet(nomComplet);
+            etudiant.setFilliere(filliere);
+            etudiant.setFaculte(faculte);
+            etudiant.setUtilisateur(user);
+            
+            user.setEtudiant(etudiant);
+
+            session.persist(user);
+            transaction.commit();
+
+            response.sendRedirect(request.getContextPath() + "/login?registration=success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + 
+                "/register?error=Registration+failed:+${e.getMessage()}");
+        }
     }
 }

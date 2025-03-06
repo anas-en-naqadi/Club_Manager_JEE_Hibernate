@@ -1,9 +1,11 @@
 package com.example.clubManager.models;
 
-import javax.persistence.*;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "club")
@@ -35,7 +37,12 @@ public class Club {
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private Set<Evenement> evenements = new HashSet<>();
 
-    @ManyToMany(mappedBy = "clubs")
+    @ManyToMany
+    @JoinTable(
+        name = "membre_club",
+        joinColumns = @JoinColumn(name = "ID_CLUB"),
+        inverseJoinColumns = @JoinColumn(name = "ID_MEMBRE")
+    )
     private Set<Etudiant> membres = new HashSet<>();
 
     // Constructors

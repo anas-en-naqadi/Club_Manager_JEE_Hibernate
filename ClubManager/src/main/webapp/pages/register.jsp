@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -13,7 +14,6 @@
 	            min-height: 100vh;
 	            display: flex;
 	            align-items: center;
-	
 	        }
 	        .register-card {
 	            backdrop-filter: blur(10px);
@@ -22,7 +22,6 @@
 	        .register-container {
 	            margin-top: 40px;
 	            margin-bottom: 40px;
-	
 	        }
 	        .password-rules {
 	            font-size: 0.9rem;
@@ -53,7 +52,7 @@
 	    </style>
 	</head>
 	<body>
-		<!-- Navbar dynamique -->
+	    <!-- Navbar dynamique -->
 	    <%@ include file="navbar.jsp" %>
 	
 	    <div class="register-section">
@@ -63,35 +62,55 @@
 	                    <div class="register-card card shadow">
 	                        <div class="card-body p-5">
 	                            <h2 class="card-title text-center mb-4">Créer un compte</h2>
-	                            
-
-								<!-- <c:if test="${not empty errors}">
-								    <div class="alert alert-danger">
-								        <ul class="mb-0">
-								            <c:forEach items="${errors}" var="error">
-								                <li>${error.value}</li>
-								            </c:forEach>
-								        </ul>
-								    </div>
-								</c:if> -->
+	
+	                            <c:if test="${not empty param.error}">
+	                                <div class="alert alert-danger">
+	                                    ${param.error}
+	                                </div>
+	                            </c:if>
 	
 	                            <form id="registerForm" method="POST" action="${pageContext.request.contextPath}/register">
-	                                <div class="row mb-3">
-	                                    <div class="col-md-6">
-	                                        <label for="firstName" class="form-label">Nom Complet</label>
-	                                        <input type="text" class="form-control" id="firstName" name="firstName" 
-	                                               value="${formData.full_name}" required>
-	                                    </div>
-	                                   
+	                                <!-- Full Name -->
+	                                <div class="mb-3">
+	                                    <label for="nomComplet" class="form-label">Nom Complet</label>
+	                                    <input type="text" class="form-control" id="nomComplet" name="nomComplet" 
+	                                           value="${param.nomComplet}" required>
 	                                </div>
-	                                
+	
+	                                <!-- CNE -->
+	                                <div class="mb-3">
+	                                    <label for="cne" class="form-label">CNE</label>
+	                                    <input type="text" class="form-control" id="cne" name="cne" 
+	                                           value="${param.cne}" required>
+	                                </div>
+	
+	                                <!-- Faculty -->
+	                                <div class="mb-3">
+	                                    <label for="faculte" class="form-label">Faculté</label>
+	                                    <select class="form-select" id="faculte" name="faculte" required>
+	                                        <option value="">Choisir une faculté</option>
+	                                        <option value="Faculté des Sciences" ${param.faculte == 'Faculté des Sciences' ? 'selected' : ''}>Faculté des Sciences</option>
+	                                        <option value="Faculté des Lettres" ${param.faculte == 'Faculté des Lettres' ? 'selected' : ''}>Faculté des Lettres</option>
+	                                        <option value="Faculté de Droit" ${param.faculte == 'Faculté de Droit' ? 'selected' : ''}>Faculté de Droit</option>
+	                                    </select>
+	                                </div>
+	
+	                                <!-- Fillière -->
+	                                <div class="mb-3">
+	                                    <label for="filliere" class="form-label">Fillière</label>
+	                                    <input type="text" class="form-control" id="filliere" name="filliere"
+	                                           value="${param.filliere}" required>
+	                                </div>
+	
+	                                <!-- Email -->
 	                                <div class="mb-3">
 	                                    <label for="email" class="form-label">Email universitaire</label>
 	                                    <input type="email" class="form-control" id="email" name="email"
-	                                           value="${formData.email}" required>
+	                                           value="${param.email}" required>
 	                                    <div class="form-text">Exemple: cin.cne@ucd.ac.ma</div>
 	                                </div>
 	
+	                                <!-- Password Fields -->
 	                                <div class="mb-3">
 	                                    <label for="password" class="form-label">Mot de passe</label>
 	                                    <input type="password" class="form-control" id="password" name="password" required>
@@ -130,7 +149,6 @@
 	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	    <script>
 	        function updatePasswordRequirements(password) {
-				console.log("dddsdqdqs")
 	            const requirements = {
 	                length: password.length >= 8,
 	                uppercase: /[A-Z]/.test(password),
@@ -145,7 +163,17 @@
 	        document.getElementById('password').addEventListener('input', function(e) {
 	            updatePasswordRequirements(e.target.value);
 	        });
-	        
+	
+	        // Password confirmation validation
+	        document.getElementById('registerForm').addEventListener('submit', function(e) {
+	            const password = document.getElementById('password').value;
+	            const confirmPassword = document.getElementById('confirmPassword').value;
+	            
+	            if (password !== confirmPassword) {
+	                e.preventDefault();
+	                alert('Les mots de passe ne correspondent pas!');
+	            }
+	        });
 	    </script>
 	</body>
 </html>

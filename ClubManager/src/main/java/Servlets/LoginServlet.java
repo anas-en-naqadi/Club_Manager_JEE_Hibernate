@@ -1,65 +1,47 @@
 package Servlets;
 
+import com.example.clubManager.models.Utilisateur;
+import com.example.clubManager.util.HibernateUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.hibernate.Session;
 import java.io.IOException;
-
-import javax.servlet.http.HttpSession;
-
-/**
- * Servlet implementation class LoginServlet
- */
-
-
 
 @SuppressWarnings("serial")
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-    	
-    	
-    	
         request.setAttribute("currentPage", "login");
-
-        // Vérifier si déjà connecté
-        if (request.getSession(false) != null && request.getSession().getAttribute("user") != null) {
-            response.sendRedirect(request.getContextPath() + "/home");
-            return;
-        }
         request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
     }
 
-    @SuppressWarnings("unused")
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        boolean rememberMe = "on".equals(request.getParameter("remember"));
 
-        try {
-            //User user = UserService.authenticate(email, password);
-            //user != null
-            if (true) {
-                HttpSession session = (HttpSession) request.getSession();
-                //session.setAttribute("user", user);
-                
-                if (rememberMe) {
-                    // Implémenter la logique "Se souvenir de moi" avec des cookies
-                }
-                
-                response.sendRedirect(request.getContextPath() + "/home");
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Utilisateur user = session.createQuery(
+                    "FROM Utilisateur WHERE email = :email", Utilisateur.class)
+                    .setParameter("email", email)
+                    .uniqueResult();
+
+            if (user != null && user.getMotDePasse().equals(password)) {
+                HttpSession httpSession = request.getSession();
+                httpSession.setAttribute("user", user);
+                response.sendRedirect(request.getContextPath() + "/my_clubs");
             } else {
-                request.setAttribute("errorMessage", "Email ou mot de passe incorrect");
-                request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/login?error=Identifiants+invalides");
             }
         } catch (Exception e) {
-            request.setAttribute("errorMessage", "Erreur lors de la connexion");
-            request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/login?error=Erreur+de+connexion");
         }
     }
 }

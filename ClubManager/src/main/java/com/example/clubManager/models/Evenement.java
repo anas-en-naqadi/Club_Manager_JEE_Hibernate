@@ -1,6 +1,6 @@
 package com.example.clubManager.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

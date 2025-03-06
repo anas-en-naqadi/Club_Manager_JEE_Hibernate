@@ -19,14 +19,20 @@ import java.io.IOException;
 @SuppressWarnings("serial")
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
+	
+	
+	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException {
-        
+    	
         request.setAttribute("currentPage", "home");
     	//List of top clubs by number of members 
         //request.setAttribute("TopClubs", ClubService.getTopClubs());
         request.getRequestDispatcher("/pages/home.jsp").forward(request, response);
     }
+    
+    
+    
 }
 
 

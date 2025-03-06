@@ -1,6 +1,6 @@
 package com.example.clubManager.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +26,7 @@ public class Etudiant {
     private String faculte;
 
     @OneToOne
-    @JoinColumn(name = "ID_UTILISATEUR", nullable = false)
+    @JoinColumn(name = "ID_UTILISATEUR", referencedColumnName = "ID_UTILISATEUR")
     private Utilisateur utilisateur;
     
     @OneToMany(mappedBy = "president", cascade = CascadeType.ALL)

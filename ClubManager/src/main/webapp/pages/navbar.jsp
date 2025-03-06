@@ -20,9 +20,7 @@
                        href="${pageContext.request.contextPath}/login">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" 
-                       href="${pageContext.request.contextPath}/logout" 
-                       onclick="handleLogout()">Logout</a>
+					<a class="nav-link" href="${pageContext.request.contextPath}/logout">Déconnexion</a>
                 </li>
             </ul>
         </div>
