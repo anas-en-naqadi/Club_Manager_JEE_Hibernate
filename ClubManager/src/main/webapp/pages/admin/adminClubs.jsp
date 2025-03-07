@@ -80,7 +80,19 @@
 
 
 	        }
-
+		    .alert-fixed {
+		        position: fixed;
+		        bottom: 20px;
+		        left: 20px;
+		        z-index: 1000;
+		        width: 300px;
+		        margin: 0;
+		        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+		    }
+		    
+		    main {
+		        margin-bottom: 100px;
+		    }
 	    </style>
 	</head>
 	<body>
@@ -88,6 +100,33 @@
 	    <div class="row">
 	        <%@ include file="adminSidebar.jsp" %>
 	        <main role="main" class="col-md-9 col-lg-10 px-4">
+	        
+	        
+				<%-- Message Display Section --%>
+				<%
+				    String message = request.getParameter("message");
+				    String success = request.getParameter("success");
+				    String error = request.getParameter("error");
+				    
+				    if (message != null && !message.isEmpty()) {
+				        String alertType = "primary"; // default type
+				        
+				        // Check error first for highest priority
+				        if (error != null && Boolean.parseBoolean(error)) {
+				            alertType = "danger";
+				        } 
+				        // Then check success status
+				        else if (success != null) {
+				            alertType = Boolean.parseBoolean(success) ? "success" : "danger";
+				        }
+				%>
+				<div class="alert alert-<%= alertType %> alert-dismissible fade show alert-fixed" role="alert">
+				    <%= message %>
+				    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+				<%
+				    }
+				%>
 	            <h2 class="mt-4 text-center mb-5">Clubs</h2>
 	            <div class="card-columns">
 	                <%

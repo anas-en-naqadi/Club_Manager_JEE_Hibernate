@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,60 +52,62 @@ public class AdminAddClub extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-    	
-    	
-    	
-        ClubService clubService = new ClubService(HibernateUtil.getSessionFactory());
-        
-        request.setCharacterEncoding("UTF-8");
-        
-        String nom = request.getParameter("nom");
-        String description = request.getParameter("description");
-        String presidentIdStr = request.getParameter("presidentId");
-        
-        
-        int presidentId = Integer.parseInt(presidentIdStr);
-        
-        // Retrieve the uploaded image file
-        Part filePart = request.getPart("image");
-        byte[] imageBytes = null;
-        if(filePart != null && filePart.getSize() > 0) {
-        	try (InputStream inputStream = filePart.getInputStream()) {
-        		imageBytes = inputStream.readAllBytes();
-        	}
-
-        }
-        
-        Session session = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-
+    	try {
+    		ClubService clubService = new ClubService(HibernateUtil.getSessionFactory());
             
-            // Retrieve the chosen president from the database
-            Etudiant president = session.get(Etudiant.class, presidentId);
+            request.setCharacterEncoding("UTF-8");
+            
+            String nom = request.getParameter("nom");
+            String description = request.getParameter("description");
+            String presidentIdStr = request.getParameter("presidentId");
             
             
-            HttpServletRequest httpRequest = (HttpServletRequest) request;
-            HttpSession httpsession = httpRequest.getSession(false);
-            Utilisateur utilisateur =  (Utilisateur) httpsession.getAttribute("user");
+            int presidentId = Integer.parseInt(presidentIdStr);
             
-            // Create and populate the Club instance
-            Club club = new Club();
-            club.setNom(nom);
-            club.setDescription(description);
-            club.setImage(imageBytes);
-            club.setPresident(president);
-            club.setUtilisateur(utilisateur);
+            // Retrieve the uploaded image file
+            Part filePart = request.getPart("image");
+            byte[] imageBytes = null;
+            if(filePart != null && filePart.getSize() > 0) {
+            	try (InputStream inputStream = filePart.getInputStream()) {
+            		imageBytes = inputStream.readAllBytes();
+            	}
+
+            }
             
-            clubService.saveClub(club);
-        } catch(Exception ex) {
+            Session session = null;
+            try {
+                session = HibernateUtil.getSessionFactory().openSession();
 
-            throw new ServletException(ex);
-        } finally {
-            if(session != null) session.close();
-        }
+                
+                // Retrieve the chosen president from the database
+                Etudiant president = session.get(Etudiant.class, presidentId);
+                
+                
+                HttpServletRequest httpRequest = (HttpServletRequest) request;
+                HttpSession httpsession = httpRequest.getSession(false);
+                Utilisateur utilisateur =  (Utilisateur) httpsession.getAttribute("user");
+                
+                // Create and populate the Club instance
+                Club club = new Club();
+                club.setNom(nom);
+                club.setDescription(description);
+                club.setImage(imageBytes);
+                club.setPresident(president);
+                club.setUtilisateur(utilisateur);
+                
+                clubService.saveClub(club);
+            } catch(Exception ex) {
 
-        response.sendRedirect(request.getContextPath() + "/admin/clubs?message=Club est ajouter avec succsée");
+                throw new ServletException(ex);
+            } finally {
+                if(session != null) session.close();
+            }
+
+            response.sendRedirect(request.getContextPath() + "/admin/clubs?message=Club+added+successfully&success=true");    		
+    	}catch (Exception e) {
+	        // Redirect to adminClubs page with an error message if something goes wrong
+	        response.sendRedirect(request.getContextPath() + "/admin/clubs?message=Failed+to+add+the+club&error=true");
+	    }
+        
     }
 }

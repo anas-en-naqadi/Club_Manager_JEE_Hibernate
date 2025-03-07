@@ -28,10 +28,10 @@ public class DeleteClubServlet extends HttpServlet {
 	        clubService.deleteClub(id);
 
 	        // Redirect to adminClubs page with success message
-	        response.sendRedirect(request.getContextPath() + "/pages/admin/adminClubs.jsp?message=Club deleted");
+	        response.sendRedirect(request.getContextPath() + "/admin/clubs?message=Club+deleted+successfully&success=true");
 	    } catch (Exception e) {
 	        // Redirect to adminClubs page with an error message if something goes wrong
-	        response.sendRedirect(request.getContextPath() + "/pages/admin/adminClubs.jsp?error=Failed to delete club");
+	        response.sendRedirect(request.getContextPath() + "/admin/clubs?message=Failed+to+delete+club&error=true");
 	    }
 	}
 
