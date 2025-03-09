@@ -7,7 +7,7 @@ import java.util.Date;
 @Table(name = "membre_club")
 @IdClass(MembreClubId.class)
 public class MembreClub {
-
+    
     @Id
     @Column(name = "ID_MEMBRE")
     private int idMembre;
@@ -17,18 +17,17 @@ public class MembreClub {
     private int idClub;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "DATE_INSCRIPTION", nullable = false)
+    @Column(name = "DATE_INSCRIPTION")
     private Date dateInscription = new Date();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_MEMBRE", insertable = false, updatable = false)
     private Etudiant etudiant;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_CLUB", insertable = false, updatable = false)
     private Club club;
 
-    // Constructors
     public MembreClub() {}
 
     public MembreClub(Etudiant etudiant, Club club) {
@@ -37,7 +36,6 @@ public class MembreClub {
         this.idMembre = etudiant.getIdEtudiant();
         this.idClub = club.getIdClub();
     }
-
     @PrePersist
     protected void onCreate() {
         this.dateInscription = new Date();

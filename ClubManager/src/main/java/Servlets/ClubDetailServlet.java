@@ -6,7 +6,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
+
+import com.example.clubManager.models.Club;
+import com.example.clubManager.models.Evenement;
+import com.example.clubManager.models.Utilisateur;
+import com.example.clubManager.services.ClubService;
+import com.example.clubManager.services.MembreClubService;
+import com.example.clubManager.services.ParticipantEvenementService;
+import com.example.clubManager.util.HibernateUtil;
+import java.util.*;
+
 
 
 /**
@@ -15,7 +27,20 @@ import java.io.IOException;
 @SuppressWarnings("serial")
 @WebServlet("/club")
 public class ClubDetailServlet extends HttpServlet {
-    @SuppressWarnings("unused")
+    private MembreClubService membreClubService;
+
+    
+    
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        membreClubService = new MembreClubService(HibernateUtil.getSessionFactory());
+    }
+    
+    
+    
+    
+    
 	@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException {
@@ -24,17 +49,44 @@ public class ClubDetailServlet extends HttpServlet {
         request.setAttribute("currentPage", "club");
         try {
             int clubId = Integer.parseInt(request.getParameter("id"));
-            //Club club = ClubService.getClubById(clubId);
+            ClubService clubservice = new ClubService(HibernateUtil.getSessionFactory());
 
-            //club != null
-            if(true) {
-                //request.setAttribute("club", club);
+            // Fetch the club with events loaded
+            Club club = clubservice.getClubWithEvents(clubId);
+
+
+            if(club != null) {
+                HttpSession httpSession = request.getSession();
+                Utilisateur user = (Utilisateur) httpSession.getAttribute("user");
+                
+                if(user != null) {
+                	if(membreClubService.isMember(clubId, user.getEtudiant().getIdEtudiant())) {
+                		request.setAttribute("isMember", true);
+                	}else {
+                		request.setAttribute("isMember", false);
+
+                	}
+                }
+
+            	
+            	
+            	
+            	
+            	
+                int memberCounts = clubservice.getMemberCount(clubId);
+
+            	Set<Evenement> evenements = (Set<Evenement>) club.getEvenements();
+
+                request.setAttribute("club", club);
+                request.setAttribute("memberCounts", memberCounts);
+                request.setAttribute("evenements", evenements);
+                
                 request.getRequestDispatcher("/pages/club.jsp").forward(request, response);
             } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Club non trouvé");
+            	request.getRequestDispatcher("/pages/home.jsp?message=Club not found&error=true").forward(request, response);
             }
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de club invalide");
+        	request.getRequestDispatcher("/pages/home.jsp?message=Club id not found&error=true").forward(request, response);
         }
     }
 

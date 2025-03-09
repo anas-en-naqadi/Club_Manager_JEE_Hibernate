@@ -1,6 +1,6 @@
 package Servlets;
 
-import com.example.clubManager.models.Club;
+import com.example.clubManager.models.Evenement;
 import com.example.clubManager.util.HibernateUtil;
 
 import jakarta.servlet.ServletException;
@@ -12,18 +12,19 @@ import org.hibernate.Session;
 import java.io.IOException;
 
 @SuppressWarnings("serial")
-@WebServlet("/clubImage")
-public class ClubImageServlet extends HttpServlet {
+@WebServlet("/eventImage")
+public class EventImageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int clubId = Integer.parseInt(request.getParameter("id"));
+    	
+        int eventId = Integer.parseInt(request.getParameter("id"));
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Club club = session.get(Club.class, clubId);
-            if (club != null && club.getImage() != null) {
+            Evenement evenement = session.get(Evenement.class, eventId);
+            if (evenement != null && evenement.getImage() != null) {
                 response.setContentType("image/jpeg");
-                response.getOutputStream().write(club.getImage());
+                response.getOutputStream().write(evenement.getImage());
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }

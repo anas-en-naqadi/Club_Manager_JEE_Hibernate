@@ -17,10 +17,13 @@
                     <a class="nav-link ${currentPage eq 'myClubs' ? 'active' : ''}" 
                        href="${pageContext.request.contextPath}/my_clubs">Mes Clubs</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link ${currentPage eq 'login' ? 'active' : ''}" 
-                       href="${pageContext.request.contextPath}/login">Login</a>
-                </li>
+                
+                <c:if test="${empty sessionScope.user}">
+	                <li class="nav-item">
+	                    <a class="nav-link ${currentPage eq 'login' ? 'active' : ''}" 
+	                       href="${pageContext.request.contextPath}/login">Login</a>
+	                </li>
+                </c:if>
                 
 				<c:if test="${not empty sessionScope.user}">
 				    <li class="nav-item">

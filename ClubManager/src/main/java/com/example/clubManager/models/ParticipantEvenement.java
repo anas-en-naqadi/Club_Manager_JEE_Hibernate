@@ -54,4 +54,11 @@ public class ParticipantEvenement {
     public void setEtudiant(Etudiant etudiant) { this.etudiant = etudiant; }
     public Evenement getEvenement() { return evenement; }
     public void setEvenement(Evenement evenement) { this.evenement = evenement; }
+    
+    
+    
+    
+    
+    
+    
 }

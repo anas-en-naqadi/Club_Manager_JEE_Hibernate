@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<%@ page import="java.util.*, com.example.clubManager.models.Club" %>
 
 
 <!DOCTYPE html>
@@ -18,10 +18,39 @@
 	            transform:scale(1.09);
 	            transition: all ease-in-out 0.4s;
 	        }
-	        .club-card{
-	            cursor: pointer;
+	    	.club-card{
+				height: 110%;
+	    	}
+	        .club-card img {
+	            height: 200px;
+	            object-fit: cover;
+	        }
+	        .club_name{
+	            transition: all ease-in-out 0.2s;
+	        }
+	        .club_name:hover{
+	            color: brown;
+	        }
+
+	        .show_more_cont{
+	        	display: flex;
+			    justify-content: space-between;
+			    align-items: center;
+			    width: 90%;
+    			position: absolute;
+	        	bottom: 5px;
+	        }
+	        h2{
+				margin-bottom: 30px;
+	        
 	        }
 	    </style>
+	    
+	    
+	    
+	    
+	    
+	    
 	</head>
 	
 	
@@ -40,23 +69,45 @@
 	    </div>
 	
 		<div class="container my-5">
-	        <h2>Clubs populaires</h2>
-	        <div class="row">
-	            <c:forEach items="${featuredClubs}" var="club">
-	                <div class="col-md-4 mb-4">
-	                    <a href="${pageContext.request.contextPath}/club?id=${club.id}">
-	                        <div class="card">
-	                            <div class="card-body">
-	                                <h5>${club.name}</h5>
-	                                <p>${club.description}</p>
-	                                <span class="badge bg-primary">${club.members} membres</span>
-	                            </div>
-	                        </div>
-	                    </a>
-	                </div>
-	            </c:forEach>
-	        </div>
-    	</div>
+		    <h2>Clubs populaire</h2>
+
+		    <div class="row g-5">
+	                <%
+	                    List<Club> popularClubs = (List<Club>) request.getAttribute("popularClubs");
+	                	Map<Integer, Integer> memberCounts = (Map<Integer, Integer>) request.getAttribute("memberCounts");
+
+	                    if (popularClubs != null && !popularClubs.isEmpty()) {
+	                        for (Club club : popularClubs) {
+	                %>	  
+					<div class="col-md-6 col-lg-4">
+                        <div class="card club-card">
+                            <img src="<%= request.getContextPath() %>/clubImage?id=<%= club.getIdClub() %>" class="card-img-top" alt="<%= club.getNom() %>">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="./club?id=<%= club.getIdClub() %>" class="text-decoration-none club_name" ><%= club.getNom() %></a>
+                                </h5>
+                                <p class="card-text"><%= club.getDescription() %></p>
+                                <div class="show_more_cont">
+									<span class="badge bg-primary">
+									    <%= (memberCounts != null && memberCounts.containsKey(club.getIdClub())) ? memberCounts.get(club.getIdClub()) : 0 %> membres
+									</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+	             <%
+	                 }
+	                } else {
+	             %>
+	                <p>Aucun club trouvé.</p>
+	              <%
+	                 }
+	             %>		    
+
+		    </div>
+		    
+		    
+		</div>
     	
     	
 	</body>

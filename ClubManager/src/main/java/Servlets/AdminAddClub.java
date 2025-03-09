@@ -94,8 +94,10 @@ public class AdminAddClub extends HttpServlet {
                 club.setImage(imageBytes);
                 club.setPresident(president);
                 club.setUtilisateur(utilisateur);
-                
                 clubService.saveClub(club);
+                clubService.addMemberToClub(club, president);
+
+                
             } catch(Exception ex) {
 
                 throw new ServletException(ex);
@@ -105,7 +107,7 @@ public class AdminAddClub extends HttpServlet {
 
             response.sendRedirect(request.getContextPath() + "/admin/clubs?message=Club+added+successfully&success=true");    		
     	}catch (Exception e) {
-	        // Redirect to adminClubs page with an error message if something goes wrong
+	        System.out.println(e.getMessage());
 	        response.sendRedirect(request.getContextPath() + "/admin/clubs?message=Failed+to+add+the+club&error=true");
 	    }
         

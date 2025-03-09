@@ -29,16 +29,11 @@ public class Etudiant {
     @JoinColumn(name = "ID_UTILISATEUR", referencedColumnName = "ID_UTILISATEUR")
     private Utilisateur utilisateur;
     
-    @OneToMany(mappedBy = "president", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "president", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Club> clubsDiriges = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "membre_club",
-        joinColumns = @JoinColumn(name = "ID_MEMBRE"),
-        inverseJoinColumns = @JoinColumn(name = "ID_CLUB")
-    )
-    private Set<Club> clubsMembre = new HashSet<>();
+    @OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MembreClub> memberships = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -74,8 +69,31 @@ public class Etudiant {
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
     public Set<Club> getClubsDiriges() { return clubsDiriges; }
     public void setClubsDiriges(Set<Club> clubsDiriges) { this.clubsDiriges = clubsDiriges; }
-    public Set<Club> getClubs() { return clubsMembre; }
-    public void setClubs(Set<Club> clubs) { this.clubsMembre = clubs; }
     public Set<Evenement> getEvenements() { return evenements; }
     public void setEvenements(Set<Evenement> evenements) { this.evenements = evenements; }
+    
+    public Set<MembreClub> getMemberships() {
+        return memberships;
+    }
+
+    public void setMemberships(Set<MembreClub> memberships) {
+        this.memberships = memberships;
+    }
+    
+    
+    // Helper method
+    public void joinClub(Club club) {
+        MembreClub membership = new MembreClub(this, club);
+        this.memberships.add(membership);
+        club.getMembres().add(membership);
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
 }

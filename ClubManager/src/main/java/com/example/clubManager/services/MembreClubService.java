@@ -67,7 +67,7 @@ public class MembreClubService {
                 dao.deleteMembreClub(session, id);
                 tx.commit();
             } catch (Exception e) {
-                tx.rollback();
+                if (tx != null) tx.rollback();
                 throw e;
             }
         }
@@ -82,8 +82,28 @@ public class MembreClubService {
 
     public List<MembreClub> getMembreClubsByMembre(int membreId) {
         try (Session session = sessionFactory.openSession()) {
-            MembreClubDao dao = new MembreClubDao();
-            return dao.getMembreClubsByMembre(session, membreId);
+            return session.createQuery(
+                "FROM MembreClub mc WHERE mc.idMembre = :membreId", MembreClub.class)
+                .setParameter("membreId", membreId)
+                .list();
         }
     }
+    
+    
+    
+    
+    public boolean isMember(int clubId, int etudiantId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(
+                    "SELECT COUNT(m) FROM MembreClub m " +
+                    "WHERE m.idClub = :clubId AND m.idMembre = :etudiantId", Long.class)
+                    .setParameter("clubId", clubId)
+                    .setParameter("etudiantId", etudiantId)
+                    .getSingleResult() > 0;
+        }
+    }
+    
+    
+
+    
 }

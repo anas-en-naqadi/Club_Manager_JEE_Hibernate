@@ -3,6 +3,7 @@ package com.example.clubManager.models;
 import java.io.Serializable;
 import java.util.Objects;
 
+@SuppressWarnings("serial")
 public class ParticipantEvenementId implements Serializable {
     private int idParticipant;
     private int idEvenement;

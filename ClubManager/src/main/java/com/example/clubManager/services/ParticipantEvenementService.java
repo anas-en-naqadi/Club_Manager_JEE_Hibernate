@@ -87,4 +87,33 @@ public class ParticipantEvenementService {
             return dao.getParticipantEvenementsByParticipant(session, participantId);
         }
     }
+    
+    
+    
+    
+    
+    public void deleteByClubAndEtudiant(int clubId, int etudiantId) {
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+            
+            String hql = "delete from ParticipantEvenement pe " +
+                         "where pe.etudiant.idEtudiant = :etudiantId " +
+                         "and pe.evenement.club.id = :clubId";
+            
+            session.createMutationQuery(hql)
+                .setParameter("etudiantId", etudiantId)
+                .setParameter("clubId", clubId)
+                .executeUpdate();
+            
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            throw e;
+        }
+    }
+    
+    
+    
+    
 }

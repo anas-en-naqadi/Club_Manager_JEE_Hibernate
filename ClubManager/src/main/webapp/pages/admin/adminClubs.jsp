@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List, com.example.clubManager.models.Club" %>
+<%@ page import="java.util.*, com.example.clubManager.models.Club" %>
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
@@ -10,8 +10,8 @@
 	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 	    <style>
+
 	        .sidebar {
-	            height: 100vh;
 	            background: #343a40;
 	            border-right: 1px solid #495057;
 	        }
@@ -92,6 +92,7 @@
 		    
 		    main {
 		        margin-bottom: 100px;
+		        height: 500vh;
 		    }
 	    </style>
 	</head>
@@ -131,6 +132,8 @@
 	            <div class="card-columns">
 	                <%
 	                    List<Club> clubs = (List<Club>) request.getAttribute("clubs");
+	                	Map<Integer, Integer> memberCounts = (Map<Integer, Integer>) request.getAttribute("memberCounts");
+
 	                    if (clubs != null && !clubs.isEmpty()) {
 	                        for (Club club : clubs) {
 	                %>
@@ -153,13 +156,18 @@
 							    Date de création:<%= club.getDateCreation() %>
 							</p>							
 							<p class="card-text">
-							    Membres: 0
+								<%= (memberCounts != null && memberCounts.containsKey(club.getIdClub())) ? memberCounts.get(club.getIdClub()) : 0 %> Membre
 							</p>
 
 	                    
 	                    
 						<div class="club_actions_cont">
 	                       	<a href="./editClub?id=<%= club.getIdClub() %>" class="btn btn-primary btn-sm club_actions">Edit</a>
+	                       	 
+	                       	 <a href="${pageContext.request.contextPath}/admin/addEvent?clubId=<%= club.getIdClub() %>" class="btn btn-info btn-sm">
+					            <i class="bi bi-calendar-plus"></i> New Event
+							</a>
+							
 							<form action="./deleteClub" method="post" style="display: inline;">
 							    <input type="hidden" name="id" value="<%= club.getIdClub() %>">
 							    <button type="submit" class="btn btn-danger btn-sm club_actions">Remove</button>

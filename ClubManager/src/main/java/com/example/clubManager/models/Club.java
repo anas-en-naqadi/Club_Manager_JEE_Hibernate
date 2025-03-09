@@ -35,16 +35,11 @@ public class Club {
     @JoinColumn(name = "ID_UTILISATEUR", nullable = false)
     private Utilisateur utilisateur;
 
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private Set<Evenement> evenements = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "membre_club",
-        joinColumns = @JoinColumn(name = "ID_CLUB"),
-        inverseJoinColumns = @JoinColumn(name = "ID_MEMBRE")
-    )
-    private Set<Etudiant> membres = new HashSet<>();
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MembreClub> membres = new HashSet<>();
 
     
     
@@ -86,8 +81,8 @@ public class Club {
     public void setUtilisateur(Utilisateur utilisateur) { this.utilisateur = utilisateur; }
     public Set<Evenement> getEvenements() { return evenements; }
     public void setEvenements(Set<Evenement> evenements) { this.evenements = evenements; }
-    public Set<Etudiant> getMembres() { return membres; }
-    public void setMembres(Set<Etudiant> membres) { this.membres = membres; }
+    public Set<MembreClub> getMembres() { return membres; }
+    public void setMembres(Set<MembreClub> membres) { this.membres = membres; }
     
     
     public byte[] getImage() { return image; }
@@ -95,9 +90,13 @@ public class Club {
     
     
     
-    
-    
-    
-    
+
+
+    // Helper method
+    public void addMembre(Etudiant etudiant) {
+        MembreClub membreClub = new MembreClub(etudiant, this);
+        this.membres.add(membreClub);
+        etudiant.getMemberships().add(membreClub);
+    }
     
 }
