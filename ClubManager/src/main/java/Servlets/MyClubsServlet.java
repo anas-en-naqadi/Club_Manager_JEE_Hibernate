@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.example.clubManager.models.Club;
+import com.example.clubManager.models.Etudiant;
 import com.example.clubManager.models.MembreClub;
 import com.example.clubManager.models.Utilisateur;
 import com.example.clubManager.services.MembreClubService;
@@ -35,7 +36,9 @@ public class MyClubsServlet extends HttpServlet {
         request.setAttribute("currentPage", "myClubs");
 
         Utilisateur user = (Utilisateur) session.getAttribute("user");
-
+        
+        
+        
         // Get clubs through MembreClub relationships
         List<MembreClub> memberships = membreClubService.getMembreClubsByMembre(user.getEtudiant().getIdEtudiant());
         
@@ -43,8 +46,10 @@ public class MyClubsServlet extends HttpServlet {
         List<Club> clubs = memberships.stream()
                 .map(MembreClub::getClub)
                 .collect(Collectors.toList());
+        
 
         request.setAttribute("clubs", clubs);
         request.getRequestDispatcher("/pages/my-clubs.jsp").forward(request, response);
+        
     }
 }

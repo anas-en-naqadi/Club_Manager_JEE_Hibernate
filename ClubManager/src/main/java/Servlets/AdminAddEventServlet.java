@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import com.example.clubManager.models.Club;
 import com.example.clubManager.models.Evenement;
+import com.example.clubManager.models.Utilisateur;
 import com.example.clubManager.services.ClubService;
 import com.example.clubManager.services.EvenementService;
 import com.example.clubManager.util.HibernateUtil;
@@ -25,7 +26,7 @@ import java.text.ParseException;
 	    maxFileSize = 1024 * 1024 * 5,   // 5MB
 	    maxRequestSize = 1024 * 1024 * 5 // 5MB
 	)
-@WebServlet("/admin/addEvent")
+@WebServlet(urlPatterns = {"/admin/addEvent" ,"/addEvent"} )
 public class AdminAddEventServlet extends HttpServlet {
     
 
@@ -58,9 +59,17 @@ public class AdminAddEventServlet extends HttpServlet {
             List<Club> clubs = clubService.getAllClubs();
             
             request.setAttribute("clubs", clubs);
+            HttpSession session = request.getSession();
+            Utilisateur user = (Utilisateur) session.getAttribute("user");
 
-            
-            request.getRequestDispatcher("/pages/admin/adminAddEvent.jsp").forward(request, response);
+
+            if(user.getRole().equals("admin")) {
+                request.getRequestDispatcher("/pages/admin/adminAddEvent.jsp").forward(request, response);
+
+            }else {
+                request.getRequestDispatcher("/pages/presidentAddEvent.jsp").forward(request, response);
+
+            }
             
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/admin/events?message=Invalid club ID&error=true");
@@ -113,7 +122,21 @@ public class AdminAddEventServlet extends HttpServlet {
             // Save event
             evenementService.saveEvenement(event);
             
-            response.sendRedirect(request.getContextPath() + "/admin/events?message=Event created successfully&success=true");
+            
+            HttpSession session = request.getSession();
+            Utilisateur user = (Utilisateur) session.getAttribute("user");
+
+
+            if(user.getRole().equals("admin")) {
+                response.sendRedirect(request.getContextPath() + "/admin/events?message=Event created successfully&success=true");
+
+            }else {
+            	response.sendRedirect(request.getContextPath() + "/my_clubs?message=Event created successfully&success=true");
+                
+
+            }
+            
+            
             
         } catch (ParseException e) {
             response.sendRedirect(request.getContextPath() + "/admin/addEvent?clubId=" + request.getParameter("clubId") + 

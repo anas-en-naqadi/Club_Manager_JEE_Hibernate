@@ -7,7 +7,7 @@
 	<head>
 	    <meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	    <title>Mes Clubs - UniClubs</title>
+	    <title>Add event - UniClubs</title>
 	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 	    
@@ -111,75 +111,52 @@
 
 	
 	    <div class="container my-5">
-	        <h1 class="text-center mb-5">Mes Clubs</h1>
-	        
-	        <c:choose>
-	            <c:when test="${empty clubs}">
-	                <div class="empty-state text-center">
-	                    <div>
-	                        <h2 class="text-muted mb-4">Aucun club rejoint pour le moment</h2>
-	                        <a href="${pageContext.request.contextPath}/clubes" class="btn btn-primary btn-lg">
-	                            Découvrir les clubs
-	                        </a>
-	                    </div>
-	                </div>
-	            </c:when>
-	            
-	            <c:otherwise>
-					<div class="container my-5">
-			
-						<div class="row g-4">
-						    <c:forEach items="${clubs}" var="club">
-						        <div class="col-md-6 col-lg-4">
-						            <div class="card club-card">
-						            
-						            	<img src="<%= request.getContextPath() %>/clubImage?id=${club.idClub}" class="card-img-top" alt="${club.nom}">
-						            	
-						            	
-						                <div class="card-body">
-						                    <h5 class="card-title">
-						                        <a href="${pageContext.request.contextPath}/club?id=${club.idClub}" 
-						                           class="text-decoration-none club_name">${club.nom}</a>
-						                    </h5>
-						                    <p class="card-text">${club.description}</p>
-						                    
-						                    <div class="bottom_cont">
-						                        <span class="badge bg-primary">${club.membres.size()} membres</span>
-						                        
-						                        
-						                        
-												<c:if test="${club.president ne null and user.etudiant ne null and club.president.idEtudiant eq user.etudiant.idEtudiant}">
-							                    	
-							                       	 <a href="${pageContext.request.contextPath}/addEvent?clubId=${club.getIdClub()}" class="btn btn-info btn-sm">
-											            <i class="bi bi-calendar-plus"></i> New Event
-													</a>
-							                    </c:if>						                        
-						                        
-							                    <form method="post" action="${pageContext.request.contextPath}/exit_club">
-							                        <input type="hidden" name="clubId" value="${club.idClub}">
-							                        <button type="submit" class="btn btn-sm btn-outline-danger ">Sortir</button>
-							                    </form>
-							                    
-							                    
-							                    
-							                    <%
-								                    Utilisateur user = (Utilisateur) session.getAttribute("user");
-							                    							                    
-							                    %>
-
-						                    </div>
-						                    
-						                </div>
-						            </div>
-						        </div>
-						    </c:forEach>
-						</div>
-					    
-					    
+<h2 class="my-4">Create New Event</h2>
+			    
+			    <form action="${pageContext.request.contextPath}/addEvent" method="post" enctype="multipart/form-data">
+			        <div class="mb-3">
+			            <label class="form-label">Event Name:</label>
+			            <input type="text" name="nom" class="form-control" required>
+			        </div>
+			        
+			        <div class="mb-3">
+			            <label class="form-label">Description:</label>
+			            <textarea name="description" class="form-control" rows="3"></textarea>
+			        </div>
+			        
+			        
+			        <div class="mb-3">
+						 <label for="image" class="form-label">Image d'evenement</label>
+						 <input type="file" class="form-control" id="image" name="image" accept="image/*">
 					</div>
-			
-	            </c:otherwise>
-	        </c:choose>
+					
+					
+			        <div class="row">
+			            <div class="col-md-6 mb-3">
+			                <label class="form-label">Date & Time:</label>
+			                <input type="datetime-local" name="date" class="form-control" required>
+			            </div>
+			            <div class="col-md-6 mb-3">
+			                <label class="form-label">Location:</label>
+			                <input type="text" name="lieu" class="form-control" required>
+			            </div>
+			        </div>
+			        
+			        <div class="mb-3">
+			            <label class="form-label">Club:</label>
+			            <select name="clubId" class="form-select" required>
+			                <c:forEach items="${clubs}" var="club">
+			                    <option value="${club.idClub}" 
+			                        ${club.idClub == preselectedClubId ? 'selected' : ''}>
+			                        ${club.nom}
+			                    </option>
+			                </c:forEach>
+			            </select>
+			        </div>
+			        
+			        <button type="submit" class="btn btn-primary">Create Event</button>
+			        <a href="${pageContext.request.contextPath}/admin/evenements" class="btn btn-secondary">Cancel</a>
+			    </form>	        
 	    </div>
 	    
 	    
